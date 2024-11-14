@@ -1,5 +1,7 @@
 # Sync files from dev1 repository to stage repository with renaming
 trigun14/stage1:
+  - source: README.md
+    dest: README.md
   - source: dev-ai-gateway-values.yaml
     dest: stage-ai-gateway-values.yaml
   - source: dev-api-env-values.yaml
