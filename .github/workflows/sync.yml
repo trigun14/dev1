@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - master
   workflow_dispatch:
 
 jobs:
@@ -13,7 +12,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4  # Ensure you're using the latest version
-
       - name: Run GitHub File Sync
         uses: BetaHuhn/repo-file-sync-action@v1
         with:
