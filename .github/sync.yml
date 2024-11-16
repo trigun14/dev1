@@ -6,9 +6,6 @@ group:
       dest: README.md
     - source: dev-ai-gateway-values.yaml
       dest: stage-ai-gateway-values.yaml
-      template:
-      image:
-        tag: '*'
     - source: dev-api-env-values.yaml
       dest: stage-api-env-values.yaml
     - source: dev-budget-checker-values.yaml
