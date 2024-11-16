@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - 'image:*' 
+      - image: 
   workflow_dispatch:
 
 jobs:
