@@ -1,21 +1,43 @@
-name: Sync Files
+name: Copy Files to Stage Repo
 
 on:
   push:
     branches:
-      - main
-    tags:
-      - 'image.tag:' 
-  workflow_dispatch:
+      - main  # Trigger the workflow when changes are pushed to the 'main' branch
 
 jobs:
-  sync:
+  copy-files:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4  # Ensure you're using the latest version
-      - name: Run GitHub File Sync
-        uses: BetaHuhn/repo-file-sync-action@v1
+      - name: Checkout Source Repository (dev)
+        uses: actions/checkout@v3  # Checks out the 'dev' repository (source)
+
+      - name: Checkout Destination Repository (stage1) using PAT
+        uses: actions/checkout@v3
         with:
-          GH_PAT: ${{ secrets.PAT_TOKEN }}  # Ensure the secret is set with your Personal Access Token
-          SKIP_PR: true 
+          repository: trigun14/stage1
+          token: ${{ secrets.PAT_TOKEN }}  # Use PAT token for authentication with destination repo
+
+      - name: Prepare and Push to Stage Repository
+        run: |
+          # Copy contents of the dev repo to the 'stage' folder
+          shopt -s extglob
+          cp -r !(stage|.git|.github) ./stage1/  # Copy everything except the excluded folders
+
+          # Loop to rename the files
+          for file in ./stage1/dev-*.yaml; do
+            mv "$file" "${file/dev-/stage-}"
+          done
+
+          # Navigate to the 'stage' directory
+          cd stage1
+
+          # Set Git configuration for commit
+          git config --global user.name "trigun14"
+          git config --global user.email "trigunanandmishra07@gmail.com"
+
+          # Add changes, commit, and push to the destination repository
+          git add .  # Stage all changes
+          git commit -m "Copied files from dev repository"  # Commit changes
+          git push origin main  # Push to the 'main' branch of the destination repo
