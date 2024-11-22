@@ -23,7 +23,7 @@ jobs:
         run: |
           # Copy contents of the dev repo to the 'stage' folder
           shopt -s extglob
-          cp -r !(stage|.git|.github) ./stage1/  # Copy everything except the excluded folders
+          cp -r !(stage1|.git|.github) ./stage1/  # Copy everything except the excluded folders
 
           # Loop to rename the files
           for file in ./stage1/dev-*.yaml; do
